@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TabMerge</title>
+<script src='popup.js'></script>
+<style>
+body { width: 15rem; display: flex; flex-direction: column; }
+#count { line-height: 1.5rem; text-align: right; }
+#count::before { content: 'counts: '; }
+textarea { font-size: 1.2rem; }
+textarea:disabled { display: none; }
+label { user-select: none; }
+body > input, body > button, body > div { height: 1.8rem; font-size: 1.2rem; box-sizing: border-box; }
+</style>
+</head>
+<body>
+	<textarea id="list" placeholder="URL list." rows="5"></textarea>
+	<button id="open">Open</button>
+	<div id="count"></div>
+</body>
+</html>
