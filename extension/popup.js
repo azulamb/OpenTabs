@@ -7,24 +7,36 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	const getUrls = ((textarea) => {
-		return () => {
-			return textarea.value.split('\n').filter((url) => {
-				return url.match(/^https?:\/\//);
-			});
-		};
+	const [getUrls, updateUrls] = ((textarea) => {
+		return [
+			() => {
+				return textarea.value.split('\n').filter((url) => {
+					return url.match(/^https?:\/\//);
+				});
+			},
+			(urls) => {
+				textarea.value = urls.join('\n');
+			},
+		];
 	})(document.getElementById('list'));
 
 	document.getElementById('open').addEventListener('click', () => {
 		GetWindowId().then(async (windowId) => {
 			const urls = getUrls();
+			const errors = [];
 			for (const url of urls) {
-				await chrome.tabs.create({
-					url: url,
-					windowId: windowId,
-				});
+				try{
+					await chrome.tabs.create({
+						url: url,
+						active: false,
+						windowId: windowId,
+					});
+				} catch(_e) {
+					errors.push(url);
+				}
 			}
-			document.getElementById('count').textContent = `${urls}`;
+			updateUrls(errors);
+			document.getElementById('count').textContent = `${urls.length}`;
 		});
 	});
 });
